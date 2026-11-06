@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDRIUX - PANEL</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <!-- TECLADO PIN DIGITAL NATIVO -->
+    <div id="auth-keypad-screen" class="pin-screen-overlay">
+        <div class="pin-box">
+            <div class="pin-title">[ INGRESE PIN  ]</div>
+            <input type="password" id="pin-display" readonly placeholder="****">
+            <div class="keypad-grid">
+                <button onclick="pressKey('1')">1</button>
+                <button onclick="pressKey('2')">2</button>
+                <button onclick="pressKey('3')">3</button>
+                <button onclick="pressKey('4')">4</button>
+                <button onclick="pressKey('5')">5</button>
+                <button onclick="pressKey('6')">6</button>
+                <button onclick="pressKey('7')">7</button>
+                <button onclick="pressKey('8')">8</button>
+                <button onclick="pressKey('9')">9</button>
+                <button onclick="clearPin()" style="color: #ff4d4d;">CLR</button>
+                <button onclick="pressKey('0')">0</button>
+                <button onclick="verifyPin()" style="color: #00ff66;">ENT</button>
+            </div>
+            <div id="pin-error-msg" style="color: #ff4d4d; margin-top: 15px; font-weight: bold; font-size: 13px;"></div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR ADMINISTRATIVO -->
+    <div class="terminal-container" id="admin-main-interface" style="display: none;">
+        <header class="terminal-header">
+            <div class="system-status" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span>ESTADO: 🟢 ONLINE ROOT </span>
+                <div>
+                    <button class="btn-action" style="border-color: #ffaa00; color: #ffaa00; font-weight: bold;" onclick="exportarArchivoBD()">DESCARGAR_ARCHIVO_BD()</button>
+                    <button class="btn-action" style="border-color: #00d9ff; color: #00d9ff; font-weight: bold;" onclick="document.getElementById('import-file').click()">CARGAR_ARCHIVO_BD()</button>
+                    <input type="file" id="import-file" style="display:none;" accept=".json" onchange="importarArchivoBD(this)">
+                </div>
+            </div>
+            <h1>ANDRIUX PANEL DE ADMINISTRADOR</h1>
+        </header>
+
+        <main class="terminal-body">
+            <section class="form-section">
+                <h2 id="form-title">[ REGISTRO_DE_SUJETO ]</h2>
+                <form id="forensic-form" onsubmit="return false;">
+                    <input type="hidden" id="edit-id" value="">
+                    <div class="form-group"><label>> NOMBRES Y APELLIDOS:</label><input type="text" id="in-nombres"></div>
+                    <div class="form-group"><label>> DOCUMENTO IDENTIFICACIÓN:</label><input type="text" id="in-identificacion"></div>
+                    <div class="form-group grid-2">
+                        <div><label>> EDAD:</label><input type="number" id="in-edad"></div>
+                        <div><label>> EPS:</label><input type="text" id="in-eps"></div>
+                    </div>
+                    <div class="form-group grid-2">
+                        <div><label>> CIUDAD:</label><input type="text" id="in-ciudad"></div>
+                        <div><label>> MÓVIL:</label><input type="tel" id="in-movil"></div>
+                    </div>
+                    <div class="form-group"><label>> MODELO CELULAR:</label><input type="text" id="in-modelocelular"></div>
+                    <div class="form-group"><label>> DIRECCIÓN DE RESIDENCIA:</label><input type="text" id="in-direccion"></div>
+                    <div class="form-group"><label>> CORREO ELECTRÓNICO:</label><input type="email" id="in-correo"></div>
+                    <div class="form-group">
+                        <label>> FOTO DE INDIVIDUO:</label><input type="file" id="in-foto" accept="image/*" onchange="processImage(this)">
+                        <div id="edit-photo-status" style="font-size:11px; margin-top:5px; color:var(--neon-blue);"></div>
+                    </div>
+                    <div class="form-group"><label>> ANTECEDENTES:</label><textarea id="in-antecedentes"></textarea></div>
+                    <button type="button" id="btn-submit-terminal" class="btn-terminal" onclick="saveSubjectLocal()">GUARDAR_REGISTRO_LOCAL()</button>
+                    <button type="button" id="btn-cancel-edit" class="btn-terminal btn-cancel" style="display:none;" onclick="cancelEdit()">CANCELAR_EDICION()</button>
+                </form>
+            </section>
+
+            <section class="preview-section">
+                <h2>[ ELIMINACIÓN_Y_MODIFICACIÓN ]</h2>
+                <div class="records-list" id="records-container"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL REPARADO CON BOTÓN DIGITAL DE EXPORTACIÓN JPG -->
+    <div id="view-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <h2>[ VISUALIZACIÓN_EXPEDIENTE ]</h2>
+            
+            <div id="capture-area-element" style="background: #121829; padding: 20px; border: 1px solid #00d9ff; border-radius: 4px;">
+                <div id="modal-data-container"></div>
+            </div>
+            
+            <button type="button" class="btn-terminal" style="background: #00ff66; color: #000; box-shadow: 0 4px 0 #00b347; margin-top: 20px;" onclick="descargarExpedienteJPG()">DESCARGAR_EXPEDIENTE_JPG()</button>
+        </div>
+    </div>
+
+    <div id="print-poster-target" class="poster-preview"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
